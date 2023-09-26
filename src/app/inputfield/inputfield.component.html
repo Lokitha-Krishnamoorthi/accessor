@@ -1,0 +1,10 @@
+<!-- <app-inputfield [label]="'First Name'" formControlName="firstName"></app-inputfield> -->
+
+
+<div>
+    <mat-form-field appearance="fill" >
+        <mat-label>{{label}}</mat-label>
+        <input matInput  [ngModel]="value" (ngModelChange)="onChange($event)" (blur)="onTouched()" />
+    </mat-form-field>
+
+</div>
