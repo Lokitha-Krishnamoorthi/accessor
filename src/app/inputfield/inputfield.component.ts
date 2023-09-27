@@ -1,11 +1,10 @@
-import { Component ,OnInit,Input, ChangeDetectionStrategy} from '@angular/core';
+import { Component ,OnInit,Input} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-inputfield',
   templateUrl: './inputfield.component.html',
   styleUrls: ['./inputfield.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers:[
     {
       provide: NG_VALUE_ACCESSOR, // accessor token now angular will know this is a form component
