@@ -1,11 +1,15 @@
 <div *ngIf="control">
   <mat-form-field [appearance]="appearance">
     <mat-label>{{ label }}</mat-label>
-    <input matInput [required]="isRequired" [type]="type" [formControl]="control" />
+    <input matInput [required]="isRequired"
+     [type]="type" 
+     [formControl]="control"  
+     [disabled]="disabled"
+     />
   </mat-form-field>
-
-  <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors"> </app-input-validations>
-
+  
+  <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors">
+  </app-input-validations>
   <div>
     Dirty: {{ control.dirty }}
   </div>
@@ -16,6 +20,9 @@
     Invalid: {{ control.invalid }}
   </div>
   <div>
-    {{control.value}}
+    control value:{{control.value}}<br>
+    isdisabled:{{control.disabled}}
   </div>
+<br/>
+  
 </div>

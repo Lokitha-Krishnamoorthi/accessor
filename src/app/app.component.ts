@@ -8,7 +8,7 @@ import { MatFormFieldAppearance } from '@angular/material/form-field';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angular';
+  title = 'control value accessor';
   errorMessages = { required: 'The First Name field is required' };
   errorMessagesl = { required: 'The Last Name field is required' };
   
@@ -24,6 +24,7 @@ export class AppComponent {
     });
   }
 
+
   onSubmit() {
     if (this.formGroup.valid) {
       console.log('Form submitted successfully!');
@@ -31,13 +32,20 @@ export class AppComponent {
 
       Object.keys(this.formGroup.controls).forEach(controlName => {
         const control = this.formGroup.get(controlName);
+        const controlValues = {
+          value:control?.value,
+          dirty: control?.dirty,
+          touched: control?.touched,
+          invalid: control?.invalid,
+          disabled: control?.disabled,
+        };
+      
         console.log(`Control: ${controlName}`);
-        console.log(`Dirty: ${control?.dirty}`);
-        console.log(`Touched: ${control?.touched}`);
-        console.log(`Invalid: ${control?.invalid}`);
+        console.log('Control Values:', controlValues);
       });
+      
     } else {
-      console.log('Form is invalid.');
+      console.log('Form is invalid. Please fix the errors.');
     }
   }
 }

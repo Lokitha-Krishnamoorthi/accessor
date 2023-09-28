@@ -7,6 +7,7 @@
         label="First Name"
         formControlName="firstname"
         [appearance]="appearance"
+        [disabled]="true"
       ></app-inputfield>
     
       <app-inputfield
@@ -17,9 +18,6 @@
       ></app-inputfield>
       <button mat-button type="submit" (click)="onSubmit()">Submit</button>
     </form>
-   
-    <!-- {{ formGroup.value | json }} -->
-
   
   </mat-card>
 </div>
