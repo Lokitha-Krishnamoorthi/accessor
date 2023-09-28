@@ -1,10 +1,21 @@
-<!-- <app-inputfield [label]="'First Name'" formControlName="firstName"></app-inputfield> -->
+<div *ngIf="control">
+  <mat-form-field [appearance]="appearance">
+    <mat-label>{{ label }}</mat-label>
+    <input matInput [required]="isRequired" [type]="type" [formControl]="control" />
+  </mat-form-field>
 
+  <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors"> </app-input-validations>
 
-<div>
-    <mat-form-field appearance="fill" >
-        <mat-label>{{label}}</mat-label>
-        <input matInput  [ngModel]="value" (ngModelChange)="onChange($event)" (blur)="onTouched()" />
-    </mat-form-field>
-
+  <div>
+    Dirty: {{ control.dirty }}
+  </div>
+  <div>
+    Touched: {{ control.touched }}
+  </div>
+  <div>
+    Invalid: {{ control.invalid }}
+  </div>
+  <div>
+    {{control.value}}
+  </div>
 </div>

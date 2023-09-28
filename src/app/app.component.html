@@ -1,15 +1,31 @@
 <div class="text-center">
   <mat-card class="card">
-    <p>Mat-input</p>
-    <div [formGroup]="myForm" >
-      <app-inputfield [label]="'First Name'" formControlName="firstName"></app-inputfield>
-      <app-inputfield [label]="'Last Name'"  formControlName="lastName" ></app-inputfield>
-    </div>
-    <p>
-      {{ myForm.value | json }}
-    </p>
+    <p>Mat-Input</p>
+    <form [formGroup]="formGroup">
+      <app-inputfield
+        [customErrorMessages]="errorMessages"
+        label="First Name"
+        formControlName="firstname"
+        [appearance]="appearance"
+      ></app-inputfield>
+    
+      <app-inputfield
+        [customErrorMessages]="errorMessagesl"
+        label="Last Name"
+        formControlName="lastname"
+        [appearance]="appearance1"
+      ></app-inputfield>
+      <button mat-button type="submit" (click)="onSubmit()">Submit</button>
+    </form>
+   
+    <!-- {{ formGroup.value | json }} -->
+
+  
   </mat-card>
 </div>
 
 
+
 <router-outlet></router-outlet>
+
+
