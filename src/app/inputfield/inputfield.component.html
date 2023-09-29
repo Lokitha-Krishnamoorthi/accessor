@@ -5,7 +5,9 @@
      [type]="type" 
      [formControl]="control"  
      [disabled]="disabled"
+     (input)="onInput($event)"
      />
+  
   </mat-form-field>
   
   <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors">

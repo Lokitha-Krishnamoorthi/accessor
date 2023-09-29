@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 
 @Component({
@@ -11,38 +11,35 @@ export class AppComponent {
   title = 'control value accessor';
   errorMessages = { required: 'The First Name field is required' };
   errorMessagesl = { required: 'The Last Name field is required' };
-  
-  appearance: MatFormFieldAppearance = 'fill'; 
-  appearance1: MatFormFieldAppearance = 'outline'; 
-  
+
+  appearance: MatFormFieldAppearance = 'fill';
+  appearance1: MatFormFieldAppearance = 'outline';
+
   formGroup: FormGroup;
+  formOutput: FormGroup;  
 
   constructor(private fb: FormBuilder) {
     this.formGroup = this.fb.group({
       firstname: ['', [Validators.required]],
       lastname: ['', [Validators.required]],
     });
+
+    this.formOutput = this.fb.group({
+      firstname: [''], 
+      lastname: [''],  
+    });
   }
 
+  inputfieldChange(value: FormControl) {
+    const controls = value.parent?.controls ?? {}; 
+    this.formOutput.patchValue(controls);
+  }
+  
 
   onSubmit() {
-    if (this.formGroup.valid) {
+    if (this.formOutput.valid) {
       console.log('Form submitted successfully!');
-      console.log('Form values:', this.formGroup.value);
-
-      Object.keys(this.formGroup.controls).forEach(controlName => {
-        const control = this.formGroup.get(controlName);
-        const controlValues = {
-          value:control?.value,
-          dirty: control?.dirty,
-          touched: control?.touched,
-          invalid: control?.invalid,
-          disabled: control?.disabled,
-        };
-      
-        console.log(`Control: ${controlName}`);
-        console.log('Control Values:', controlValues);
-      });
+      console.log('Form Output:', this.formOutput.value);
       
     } else {
       console.log('Form is invalid. Please fix the errors.');

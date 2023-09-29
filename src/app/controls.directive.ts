@@ -19,16 +19,18 @@ type InputType = 'text' | 'number' | 'email' | 'password';
 export class ControlsDirective <T>implements ControlValueAccessor, OnInit
 {
   control: FormControl | undefined;
-  isRequired = false;
 
+  isRequired = false;
   private _destroy$ = new Subject<void>();
   private _onTouched!: () => T;
+  
   @Input() label = '';
   @Input() type: InputType = 'text';
   @Input() customErrorMessages: Record<string, string> = {};
   @Input() appearance: MatFormFieldAppearance = 'fill'; 
   @Input() disabled: boolean = false;
- 
+  @Output() valueChange = new EventEmitter<FormControl>(); 
+
   constructor(@Inject(Injector) private injector: Injector) {}
  
   
@@ -41,10 +43,10 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
     try {
       const formControl = this.injector.get(NgControl);
 
+    console.log("form",formControl.name);
       switch (formControl.constructor) {
         case FormControlName:
-          this.control = this.injector
-            .get(FormGroupDirective)
+          this.control = this.injector.get(FormGroupDirective)
             .getControl(formControl as FormControlName);
           break;
         default:
@@ -52,6 +54,7 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
             .form as FormControl;
           break;
       }
+
       if (this.control) {
         if (this.disabled) {
           this.control.disable();
@@ -79,28 +82,36 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
       distinctUntilChanged(),               // Emit distinct values only
       tap((val) => fn(val))                 // Call the provided callback function with the value
     )
-    .subscribe(() => this.control?.markAsUntouched());  // Mark the control as untouched when the value changes
+    .subscribe(() => {
+      this.control?.markAsUntouched()         // Mark the control as untouched when the value changes
+      this.valueChange.emit(this.control);  
+    }); 
 }
 
   registerOnTouched(fn: () => T): void {
     this._onTouched = fn;
   }
 
-  getControlValue(): any {
-    console.log("valuesss",this.control?.value);
-    return this.control?.value;
+
+
+  isControlDirty(): boolean {
+    return this.control ? this.control.dirty : false;
   }
 
-
-  @HostBinding('class.dirty') get isDirty() {
-    return this.control?.dirty;
-  }
-
-  @HostBinding('class.ng-invalid') get isInvalid() {
-    return this.control?.invalid;
+  isControlValid(): boolean{
+    return this.control ? this.control.invalid : false;
   }
 
   @HostBinding('class.ng-touched') get isTouched() {
     return this.control?.touched;
+  }
+
+  // output changes during onchange event called
+  onInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target) {
+      const value = target.value;
+      console.log("value from custom",value);
+    }
   }
 }
