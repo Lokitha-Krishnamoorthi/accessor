@@ -4,14 +4,13 @@
     <input matInput [required]="isRequired"
      [type]="type" 
      [formControl]="control"  
-     [disabled]="disabled"
      (input)="onInput($event)"
      />
-  
   </mat-form-field>
   
   <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors">
   </app-input-validations>
+  
   <div>
     Dirty: {{ control.dirty }}
   </div>

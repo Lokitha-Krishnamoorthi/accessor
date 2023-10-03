@@ -42,37 +42,49 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
   setFormControl() {
     try {
       const formControl = this.injector.get(NgControl);
-
-    console.log("form",formControl.name);
-      switch (formControl.constructor) {
-        case FormControlName:
-          this.control = this.injector.get(FormGroupDirective)
-            .getControl(formControl as FormControlName);
-          break;
-        default:
-          this.control = (formControl as FormControlDirective)
-            .form as FormControl;
-          break;
-      }
-
-      if (this.control) {
-        if (this.disabled) {
-          this.control.disable();
-        } else {
-          this.control.enable();
+      if (formControl) {
+        switch (formControl.constructor) {
+          case FormControlName:
+            this.control = this.injector.get(FormGroupDirective)
+              .getControl(formControl as FormControlName);
+            break;
+          default:
+            this.control = (formControl as FormControlDirective)
+              .form as FormControl;
+            break;
         }
+  
+        if (this.control) {
+          if (this.disabled) {
+            this.control.disable();
+          } else {
+            this.control.enable();
+          }
+        }
+      } else {
+        // If NgControl is not provided, create a new FormControl
+        this.control = new FormControl();
       }
-     
     } catch (err) {
-      this.control = new FormControl();
+      // Handle errors if necessary
+      this.control = new FormControl(); // Fallback to a new FormControl on error
     }
   }
 
+  // writeValue(value: T): void {
+  //   if (this.control) {
+  //     this.control.setValue(value);
+  //   } else {
+  //     console.error('FormControl not initialized, cannot set value.');
+  //     this.control = new FormControl(value);
+  //   }
+  // }
   writeValue(value: T): void {
-    this.control
-      ? this.control.setValue(value)
-      : (this.control = new FormControl(value));
+    if (this.control && this.control.value !== value) {  // Check if the value is different
+      this.control.setValue(value);  // Set the value only if it's different
+    }
   }
+  
 
   registerOnChange(fn: (val: T | null) => T): void {
     this.control?.valueChanges
@@ -83,15 +95,14 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
       tap((val) => fn(val))                 // Call the provided callback function with the value
     )
     .subscribe(() => {
-      this.control?.markAsUntouched()         // Mark the control as untouched when the value changes
-      this.valueChange.emit(this.control);  
+      this.valueChange.emit(this.control); 
+      this.control?.markAsUntouched()         // Mark the control as untouched when the value changes 
     }); 
 }
 
   registerOnTouched(fn: () => T): void {
     this._onTouched = fn;
   }
-
 
 
   isControlDirty(): boolean {
