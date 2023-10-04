@@ -4,8 +4,6 @@ import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -41,7 +39,6 @@ export class AppComponent implements OnDestroy{
       } else {
         console.error("Control 'lastname' not found in the formGroup.");
       }
-
 
       console.log('Form control values changed:', this.formGroup.value);
     });
@@ -87,7 +84,7 @@ export class AppComponent implements OnDestroy{
     console.log('Disabled:', this.formGroup.disabled);
     console.log('Invalid:', this.formGroup.invalid);
     console.log('Touched:', this.formGroup.touched);
-    // Loop through controls to log their states
+
     for (const controlName in this.formGroup.controls) {
       if (this.formGroup.controls.hasOwnProperty(controlName)) {
         const control = this.formGroup.get(controlName);
@@ -110,6 +107,8 @@ export class AppComponent implements OnDestroy{
     if (this.formGroup) {
       console.log('Form submitted successfully!');
       this.disableControl();
+      this.markControlAsPristine("lastname");
+      //this.logFormGroupState();
       //Update the control name from 'firstname' to 'fname'
       this.formGroup.addControl('fname', this.formGroup.get('firstname'));
       this.formGroup.removeControl('firstname');
