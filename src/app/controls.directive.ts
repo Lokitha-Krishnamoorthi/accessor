@@ -19,7 +19,7 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
 {
   control: FormControl | undefined;
 
-  isRequired = false;
+  
   private _destroy$ = new Subject<void>();
   private _onTouched!: () => T;
   
@@ -27,7 +27,6 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
  
   ngOnInit() {
     this.setFormControl();
-    this.isRequired = this.control?.hasValidator(Validators.required) ?? false;
   }
 
   setFormControl() {
