@@ -7,8 +7,6 @@
         label="First Name"
         formControlName="firstname"
         [appearance]="appearance"
-        [disabled]="true"
-        (valueChange)="inputfieldChange($event)"
       ></app-inputfield>
 
       <app-inputfield
@@ -16,18 +14,16 @@
         label="Last Name"
         formControlName="lastname"
         [appearance]="appearance1"
-        (valueChange)="inputfieldChange($event)"
       ></app-inputfield>
       <div>
         app ::{{ formGroup.get('lastname')?.value || "null"}}
       </div>
-      
       <app-inputfield
       *ngIf="formGroup.get('age')" 
       label="Age"
       formControlName="age"
       [appearance]="appearance"
-      (valueChange)="inputfieldChange($event)"
+      
     ></app-inputfield>
     
     <div *ngIf="formGroup.get('age')" >
@@ -35,11 +31,10 @@
     </div>
       <button mat-button type="submit" (click)="onSubmit()">Submit</button>
     </form>
+    
+    <pre>{{ formGroup.value | json }}</pre>
   </mat-card>
 </div>
-
-
-
 <router-outlet></router-outlet>
 
 

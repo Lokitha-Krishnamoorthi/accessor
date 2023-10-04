@@ -8,10 +8,9 @@ import {
   FormGroupDirective,
   FormControlDirective,
 } from '@angular/forms';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
+
 import { Subject, takeUntil, startWith, distinctUntilChanged, tap } from 'rxjs';
 
-type InputType = 'text' | 'number' | 'email' | 'password';
 
 @Directive({
   selector: '[appControls]',
@@ -24,16 +23,8 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
   private _destroy$ = new Subject<void>();
   private _onTouched!: () => T;
   
-  @Input() label = '';
-  @Input() type: InputType = 'text';
-  @Input() customErrorMessages: Record<string, string> = {};
-  @Input() appearance: MatFormFieldAppearance = 'fill'; 
-  @Input() disabled: boolean = false;
-  @Output() valueChange = new EventEmitter<FormControl>(); 
-
   constructor(@Inject(Injector) private injector: Injector) {}
  
-  
   ngOnInit() {
     this.setFormControl();
     this.isRequired = this.control?.hasValidator(Validators.required) ?? false;
@@ -42,6 +33,7 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
   setFormControl() {
     try {
       const formControl = this.injector.get(NgControl);
+      console.log("formcontrol",formControl);
       if (formControl) {
         switch (formControl.constructor) {
           case FormControlName:
@@ -53,21 +45,12 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
               .form as FormControl;
             break;
         }
-  
-        if (this.control) {
-          if (this.disabled) {
-            this.control.disable();
-          } else {
-            this.control.enable();
-          }
-        }
       } else {
         // If NgControl is not provided, create a new FormControl
         this.control = new FormControl();
       }
     } catch (err) {
-      // Handle errors if necessary
-      this.control = new FormControl(); // Fallback to a new FormControl on error
+      this.control = new FormControl(); 
     }
   }
 
@@ -83,8 +66,8 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
     if (this.control && this.control.value !== value) {  // Check if the value is different
       this.control.setValue(value);  // Set the value only if it's different
     }
+    
   }
-  
 
   registerOnChange(fn: (val: T | null) => T): void {
     this.control?.valueChanges
@@ -94,8 +77,7 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
       distinctUntilChanged(),               // Emit distinct values only
       tap((val) => fn(val))                 // Call the provided callback function with the value
     )
-    .subscribe(() => {
-      this.valueChange.emit(this.control); 
+    .subscribe(() => { 
       this.control?.markAsUntouched()         // Mark the control as untouched when the value changes 
     }); 
 }
@@ -104,25 +86,4 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
     this._onTouched = fn;
   }
 
-
-  isControlDirty(): boolean {
-    return this.control ? this.control.dirty : false;
-  }
-
-  isControlValid(): boolean{
-    return this.control ? this.control.invalid : false;
-  }
-
-  @HostBinding('class.ng-touched') get isTouched() {
-    return this.control?.touched;
-  }
-
-  // output changes during onchange event called
-  onInput(event: Event) {
-    const target = event.target as HTMLInputElement;
-    if (target) {
-      const value = target.value;
-      console.log("value from custom",value);
-    }
-  }
 }

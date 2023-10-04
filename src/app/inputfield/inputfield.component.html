@@ -1,10 +1,10 @@
 <div *ngIf="control">
   <mat-form-field [appearance]="appearance">
-    <mat-label>{{ label }}</mat-label>
+    <mat-label
+    >{{ label }}</mat-label>
     <input matInput [required]="isRequired"
      [type]="type" 
      [formControl]="control"  
-     (input)="onInput($event)"
      />
   </mat-form-field>
   
@@ -13,6 +13,9 @@
   
   <div>
     Dirty: {{ control.dirty }}
+  </div>
+  <div>
+    pristine: {{ control.pristine }}
   </div>
   <div>
     Touched: {{ control.touched }}
