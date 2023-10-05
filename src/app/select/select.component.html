@@ -1,0 +1,21 @@
+<div class="dvs-form-control" *ngIf="control">
+    <!-- <label [for]="selectId" *ngIf="label" [class.required]="isRequired">{{
+      label
+    }}</label> -->
+    <mat-form-field>
+      <mat-label *ngIf="label" [class.required]="isRequired">{{label}}</mat-label>
+    <mat-select [formControl]="control" [id]="selectId">
+      <mat-option *ngFor="let option of options" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-select>
+    </mat-form-field>
+    <!-- <select [formControl]="control" [id]="selectId">
+      <option *ngFor="let option of options" [value]="option">
+        {{ option }}
+      </option>
+    </select> -->
+  
+    <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors">
+  </app-input-validations>
+  </div>

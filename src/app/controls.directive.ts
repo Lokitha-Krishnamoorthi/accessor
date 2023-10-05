@@ -18,8 +18,7 @@ import { Subject, takeUntil, startWith, distinctUntilChanged, tap } from 'rxjs';
 export class ControlsDirective <T>implements ControlValueAccessor, OnInit
 {
   control: FormControl | undefined;
-
-  
+  isRequired = false;
   private _destroy$ = new Subject<void>();
   private _onTouched!: () => T;
   
@@ -27,6 +26,7 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
  
   ngOnInit() {
     this.setFormControl();
+    this.isRequired = this.control?.hasValidator(Validators.required) ?? false;
   }
 
   setFormControl() {
@@ -65,9 +65,8 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
     if (this.control && this.control.value !== value) {  // Check if the value is different
       this.control.setValue(value);  // Set the value only if it's different
     }
-    
   }
-
+  
   registerOnChange(fn: (val: T | null) => T): void {
     this.control?.valueChanges
     .pipe(

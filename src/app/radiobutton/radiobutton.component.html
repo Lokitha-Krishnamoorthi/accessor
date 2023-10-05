@@ -1,0 +1,19 @@
+<div class="dvs-form-control" *ngIf="control">
+  <label [for]="radioId" *ngIf="label" [class.required]="isRequired">{{ label }}</label>
+  <input type="radio" [formControl]="control" [id]="radioId" [value]="value" />
+  <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors">
+  </app-input-validations>
+</div>
+
+
+ <!-- <div class="dvs-form-control" *ngIf="control">
+  <mat-radio-group [formControl]="control">
+    <mat-radio-button [value]="value">
+      <ng-container *ngIf="label">{{ label }}</ng-container>
+    </mat-radio-button>
+  </mat-radio-group>
+  
+  <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors">
+  </app-input-validations>
+  
+</div> -->

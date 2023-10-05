@@ -11,13 +11,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { ControlsDirective } from './controls.directive';
 import { InputValidationsComponent } from './input-validations/input-validations.component';
-
+import { SelectComponent } from './select/select.component';
+import { CheckboxComponent } from './checkbox/checkbox.component';
+import { MultiselectComponent } from './multiselect/multiselect.component';
+import { RadiobuttonComponent } from './radiobutton/radiobutton.component';
+import { MatSelectModule } from '@angular/material/select';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 @NgModule({
   declarations: [
     AppComponent,
     InputfieldComponent,
     ControlsDirective,
-    InputValidationsComponent
+    InputValidationsComponent,
+    SelectComponent,
+    CheckboxComponent,
+    MultiselectComponent,
+    RadiobuttonComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +37,10 @@ import { InputValidationsComponent } from './input-validations/input-validations
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

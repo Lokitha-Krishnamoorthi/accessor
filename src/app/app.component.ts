@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -14,18 +14,34 @@ export class AppComponent implements OnDestroy{
   title = 'control value accessor';
   errorMessages = { required: 'The First Name field is required' };
   errorMessagesl = { required: 'The Last Name field is required' };
+  emyear = {required: 'Select any year'};
+  emage = {required: 'select age'};
+  emclick = {required: 'click the checkbox'};
 
   appearance: MatFormFieldAppearance = 'fill';
   appearance1: MatFormFieldAppearance = 'outline';
 
   formGroup: FormGroup;
+  checkboxgrp: FormGroup;
+ 
 
   private formSubscription: Subscription;
+  private checkboxSubscription: Subscription;
+
 
   constructor(private fb: FormBuilder) {
     this.formGroup = this.fb.group({
           firstname: ['', [Validators.required]],
           lastname: ['', [Validators.required]],
+          age: [, [Validators.required]],
+          click:[,[Validators.required]],
+          years:[],
+          radioControl: [null, [Validators.required]]
+  
+        });
+    this.checkboxgrp = this.fb.group({
+          PG:[false,[Validators.required]],
+          UG:[false,[Validators.required]],
         });
     
     // Subscribe to form control value changes
@@ -42,7 +58,13 @@ export class AppComponent implements OnDestroy{
 
       console.log('Form control values changed:', this.formGroup.value);
     });
+
+    // Subscribe to form control value changes for checkboxgrp
+    this.checkboxSubscription = this.checkboxgrp.valueChanges.subscribe(value => {
+      console.log('Checkbox group values changed:', this.checkboxgrp.value);
+    });
   }
+  
   disableControl() {
     const control = this.formGroup.get('firstname');
     if (control) {
@@ -112,17 +134,19 @@ export class AppComponent implements OnDestroy{
       //Update the control name from 'firstname' to 'fname'
       this.formGroup.addControl('fname', this.formGroup.get('firstname'));
       this.formGroup.removeControl('firstname');
-      this.formGroup.addControl('age', new FormControl('', [Validators.required]));
+      this.formGroup.addControl('year', new FormControl('', [Validators.required]));
      
       // Set the form values here directly
       this.formGroup.patchValue({
         fname: 'loki',
         lastname: 'loki',
-        age: 20
+        year: 20
       });
-      console.log('Form values:', this.formGroup.value);
+      console.log('FormGroup values:', this.formGroup.value);
       this.logFormGroupState();
-    } else {
+      console.log('Checkbox',this.checkboxgrp.value);
+    } 
+    else {
       console.log('Form is invalid. Please fix the errors.');
     }
   }
@@ -131,6 +155,9 @@ export class AppComponent implements OnDestroy{
     // Unsubscribe to prevent memory leaks when the component is destroyed
     if (this.formSubscription) {
       this.formSubscription.unsubscribe();
+    }
+    if(this.checkboxSubscription){
+      this.checkboxSubscription.unsubscribe();
     }
   }
 }

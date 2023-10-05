@@ -18,23 +18,87 @@
       <div>
         app ::{{ formGroup.get('lastname')?.value || "null"}}
       </div>
+     
+    
+      <!-- <app-radiobutton
+      label="Dayscholor"
+      value="Dayscholor"
+      [radioId]="'radioId1'"
+      formControlName="radioControl"
+    ></app-radiobutton>
+    <app-radiobutton
+      label="Hosteller"
+      value="Hosteller"
+      [radioId]="'radioId2'"
+      formControlName="radioControl"
+    ></app-radiobutton> -->
+    <!-- parent.component.html -->
+  <app-radiobutton label="Dayscholor" value="Dayscholor" radioId="radioId1" formControlName="radioControl"></app-radiobutton>
+  <app-radiobutton label="Hosteller" value="Hosteller" radioId="radioId2" formControlName="radioControl"></app-radiobutton>
+
+    
+    
+      <app-select
+        [customErrorMessages]="emage"
+        label="Age"
+        selectId="myId"
+        [options]="['1', '2', '3']"
+        formControlName="age"
+      ></app-select>
+      <div>
+        app :: {{ formGroup.get('age')?.value || "null"}}
+      </div>
+      <app-checkbox
+          [customErrorMessages]="emclick"
+          label="click"
+          selectId="click"
+          formControlName="click"
+          ></app-checkbox>
+      <div>
+        app :: {{ formGroup.get('click')?.value || "null"}}
+      </div>
+      <app-multiselect
+      label="year"
+      multiSelectId="year"
+      [options]="['2021', '2022', '2023']"
+      formControlName="years"
+      ></app-multiselect>
+      <div>
+        Selected Years: {{ formGroup.get('years')?.value?.join(', ') || 'None' }}
+        </div> 
+
       <app-inputfield
-      *ngIf="formGroup.get('age')" 
-      label="Age"
-      formControlName="age"
+      *ngIf="formGroup.get('year')" 
+      label="Year"
+      formControlName="year"
       [appearance]="appearance"
-      
     ></app-inputfield>
     
-    <div *ngIf="formGroup.get('age')" >
-      app :: {{ formGroup.get('age')?.value || "null"}}
+    <div *ngIf="formGroup.get('year')" >
+      app :: {{ formGroup.get('year')?.value || "null"}}
     </div>
+    <form [formGroup]="checkboxgrp">
+      <app-checkbox
+          label="UG"
+          selectId="ug"
+          formControlName="UG"
+          ></app-checkbox>
+          <app-checkbox
+          label="PG"
+          selectId="pg"
+          formControlName="PG"
+          ></app-checkbox>
+    </form>
       <button mat-button type="submit" (click)="onSubmit()">Submit</button>
     </form>
-    
+   
+   
+    <pre>  checkbox: {{ checkboxgrp.value | json }}</pre>
+
     <pre>{{ formGroup.value | json }}</pre>
   </mat-card>
 </div>
+
 <router-outlet></router-outlet>
 
 
