@@ -3,6 +3,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ThemeService } from './theme.service';
+// import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -27,9 +29,11 @@ export class AppComponent implements OnDestroy{
 
   private formSubscription: Subscription;
   private checkboxSubscription: Subscription;
-
+  // private themeService!: ThemeService;
+  // private cookieService!: CookieService;
 
   constructor(private fb: FormBuilder) {
+    
     this.formGroup = this.fb.group({
           firstname: ['', [Validators.required]],
           lastname: ['', [Validators.required]],
@@ -65,6 +69,7 @@ export class AppComponent implements OnDestroy{
     });
   }
   
+
   disableControl() {
     const control = this.formGroup.get('firstname');
     if (control) {
@@ -98,7 +103,27 @@ export class AppComponent implements OnDestroy{
       console.error(`Control '${controlName}' not found in the formGroup.`);
     }
   }
- 
+  themeService: ThemeService = new ThemeService;
+//   cookieService!: CookieService;
+// ngOnInit() {
+//   // Retrieve the theme value from cookies
+//   const storedTheme = this.cookieService.get('theme');
+  
+//   // Set the retrieved theme value in the service (or provide a default theme if none is found)
+//   const defaultTheme = 'light'; // You can define your default theme here
+//   const themeToApply = storedTheme || defaultTheme;
+//   this.themeService.setActiveTheme(themeToApply);
+// }
+  toggleTheme() {
+    const currentTheme = this.themeService.getActiveTheme();
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    // Set the new theme value in a cookie
+    // this.cookieService.set('theme', newTheme);
+    
+    // Update the theme in the service
+    this.themeService.setActiveTheme(newTheme);
+  }
   private logFormGroupState() {
     console.log('FormGroup State:');
     console.log('Dirty:', this.formGroup.dirty);

@@ -1,3 +1,8 @@
+<div class="container">
+  <h1>My Angular Theme App</h1>
+  <button class="toggle" (click)="toggleTheme()">Toggle Theme</button>
+</div>
+
 <div class="text-center">
   <mat-card class="card">
     <p>Mat-Input</p>
@@ -7,6 +12,7 @@
         label="First Name"
         formControlName="firstname"
         [appearance]="appearance"
+
       ></app-inputfield>
 
       <app-inputfield

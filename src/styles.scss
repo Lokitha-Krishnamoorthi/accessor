@@ -1,4 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+@import "variables";
+@import "colors";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@include generate-color-classes;
+
+[data-theme="light"] {
+  //check if this is best practice
+  // background-color: $error;
+  @extend .bg-primary;
+  @extend .text-secondary;
+  font-family: "Courier New", Courier, monospace;
+  .btn {
+    background-color: $error;
+  }
+}
+
+[data-theme="dark"] {
+  // background-color: $secondary;
+  // color: $primary;
+  @extend .bg-secondary;
+  @extend .text-primary;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  .btn {
+    background-color: $info;
+  }
+}
