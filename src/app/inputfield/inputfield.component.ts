@@ -1,5 +1,5 @@
-import { Component ,OnInit,Input, forwardRef, Output, EventEmitter} from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component ,Input, forwardRef} from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ControlsDirective } from '../controls.directive';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 

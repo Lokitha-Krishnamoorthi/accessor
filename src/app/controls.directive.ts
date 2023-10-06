@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostBinding, Inject, Injector, Input, OnInit, Output } from '@angular/core';
+import { Directive, Inject, Injector,  OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -11,10 +11,10 @@ import {
 
 import { Subject, takeUntil, startWith, distinctUntilChanged, tap } from 'rxjs';
 
-
 @Directive({
   selector: '[appControls]',
 })
+
 export class ControlsDirective <T>implements ControlValueAccessor, OnInit
 {
   control: FormControl | undefined;
@@ -44,39 +44,29 @@ export class ControlsDirective <T>implements ControlValueAccessor, OnInit
               .form as FormControl;
             break;
         }
-      } else {
-        // If NgControl is not provided, create a new FormControl
-        this.control = new FormControl();
-      }
+      } 
     } catch (err) {
       this.control = new FormControl(); 
     }
   }
 
-  // writeValue(value: T): void {
-  //   if (this.control) {
-  //     this.control.setValue(value);
-  //   } else {
-  //     console.error('FormControl not initialized, cannot set value.');
-  //     this.control = new FormControl(value);
-  //   }
-  // }
+ 
   writeValue(value: T): void {
     if (this.control && this.control.value !== value) {  // Check if the value is different
-      this.control.setValue(value);  // Set the value only if it's different
+      this.control.setValue(value);                      // Set the value only if it's different
     }
   }
   
   registerOnChange(fn: (val: T | null) => T): void {
     this.control?.valueChanges
     .pipe(
-      takeUntil(this._destroy$),          // Unsubscribe from value changes when the component is destroyed
-      startWith(this.control.value),       // Emit the initial value when subscribing
-      distinctUntilChanged(),               // Emit distinct values only
-      tap((val) => fn(val))                 // Call the provided callback function with the value
+      takeUntil(this._destroy$),                          // Unsubscribe from value changes when the component is destroyed
+      startWith(this.control.value),                      // Emit the initial value when subscribing
+      distinctUntilChanged(),                             // Emit distinct values only
+      tap((val) => fn(val))                               // Call the provided callback function with the value
     )
     .subscribe(() => { 
-      this.control?.markAsUntouched()         // Mark the control as untouched when the value changes 
+      this.control?.markAsUntouched()                     // Mark the control as untouched when the value changes 
     }); 
 }
 

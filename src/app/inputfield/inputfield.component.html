@@ -1,16 +1,21 @@
-<div *ngIf="control">
+<div *ngIf="control" >
   <mat-form-field [appearance]="appearance">
-    <mat-label
-    >{{ label }}</mat-label>
-    <input matInput 
-     [type]="type" 
-     [formControl]="control"  
-     />
+    <mat-label [class.required]="isRequired">{{ label }}</mat-label>
+    <input 
+        matInput [type]="type" 
+        [formControl]="control" 
+    />
   </mat-form-field>
-  
-  <app-input-validations [customErrorMessages]="customErrorMessages" [errors]="control.errors">
+
+  <app-input-validations 
+  [customErrorMessages]="customErrorMessages" 
+  [errors]="control.errors">
   </app-input-validations>
-  
+
+  <!--
+    To view the properties in shared component
+  -->
+
   <!-- <div>
     Dirty: {{ control.dirty }}
   </div>
@@ -24,9 +29,10 @@
     Invalid: {{ control.invalid }}
   </div>
   <div>
-    control value:{{control.value}}<br>
+    control value:{{control.value}}
+    <br/>
     isdisabled:{{control.disabled}}
-  </div> -->
-<br/>
-  
+  </div> 
+<br/>-->
+
 </div>

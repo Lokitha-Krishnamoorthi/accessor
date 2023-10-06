@@ -1,13 +1,60 @@
+@import "src/variables";
 
-.text-center{
-    text-align: center;
-    padding-top: 150px;
-    font-size: 14px;
-    padding-left: 530px;
-}
-.card{
-    width: 450px;
-    text-align: center;
-    font-size: 16px;
+@import "src/colors";
+
+
+@mixin btn() {
+
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 10px;
+  margin: $base-margin;
+  font-size: $base-font-size;
+
 }
 
+.text-center {
+  text-align: center;
+  padding-top: 150px;
+  font-size: 14px;
+  padding-left: 530px;
+}
+
+.card {
+  width: 450px;
+  text-align: center;
+  font-size: 16px;
+}
+
+[data-theme="light"] {
+  form {
+    background-color: $error;
+  }
+  .btn {
+    background-color: aquamarine;
+  }
+
+}
+
+[data-theme="dark"] {
+
+  form {
+   background-color: $info;
+  }
+
+  .btn {
+    background-color: cadetblue;
+  }
+
+}
+
+.btn {
+  @include btn;
+}
+
+.bt1 {
+  @include btn;
+  border: none;
+}

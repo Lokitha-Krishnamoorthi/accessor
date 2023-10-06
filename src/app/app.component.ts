@@ -4,6 +4,7 @@ import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ThemeService } from './theme.service';
+import { CookieService } from 'ngx-cookie-service';
 // import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -14,14 +15,18 @@ import { ThemeService } from './theme.service';
 export class AppComponent implements OnDestroy{
 
   title = 'control value accessor';
+
+  // Custom error Messages
   errorMessages = { required: 'The First Name field is required' };
   errorMessagesl = { required: 'The Last Name field is required' };
   emyear = {required: 'Select any year'};
   emage = {required: 'select age'};
   emclick = {required: 'click the checkbox'};
 
+  //Input Field Apperance
   appearance: MatFormFieldAppearance = 'fill';
   appearance1: MatFormFieldAppearance = 'outline';
+
 
   formGroup: FormGroup;
   checkboxgrp: FormGroup;
@@ -32,7 +37,7 @@ export class AppComponent implements OnDestroy{
   // private themeService!: ThemeService;
   // private cookieService!: CookieService;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private cookieService: CookieService) {
     
     this.formGroup = this.fb.group({
           firstname: ['', [Validators.required]],
@@ -41,8 +46,8 @@ export class AppComponent implements OnDestroy{
           click:[,[Validators.required]],
           years:[],
           radioControl: [null, [Validators.required]]
-  
         });
+
     this.checkboxgrp = this.fb.group({
           PG:[false,[Validators.required]],
           UG:[false,[Validators.required]],
@@ -51,17 +56,16 @@ export class AppComponent implements OnDestroy{
     // Subscribe to form control value changes
     this.formSubscription = this.formGroup.valueChanges.subscribe(value => {
 
-      //setvalue
-      const modifiedValue = value.lastname.toUpperCase();
-      const firstnameControl = this.formGroup.get('lastname');
-      if (firstnameControl) {
-        firstnameControl.setValue(modifiedValue, { emitEvent: false });
-      } else {
-        console.error("Control 'lastname' not found in the formGroup.");
-      }
-
-      console.log('Form control values changed:', this.formGroup.value);
-    });
+          //setvalue for lastname 
+          const modifiedValue = value.lastname.toUpperCase();
+          const firstnameControl = this.formGroup.get('lastname');
+          if (firstnameControl) {
+            firstnameControl.setValue(modifiedValue, { emitEvent: false });
+          } else {
+            console.error("Control 'lastname' not found in the formGroup.");
+          }
+          console.log('Form control values changed:', this.formGroup.value);
+        });
 
     // Subscribe to form control value changes for checkboxgrp
     this.checkboxSubscription = this.checkboxgrp.valueChanges.subscribe(value => {
@@ -70,8 +74,9 @@ export class AppComponent implements OnDestroy{
   }
   
 
-  disableControl() {
-    const control = this.formGroup.get('firstname');
+  
+  disableControl(controlName: string) {
+    const control = this.formGroup.get(controlName);
     if (control) {
       control.disable();
     } else {
@@ -79,14 +84,15 @@ export class AppComponent implements OnDestroy{
     }
   }
 
-  enableControl() {
-    const control = this.formGroup.get('firstname');
+  enableControl(controlName: string) {
+    const control = this.formGroup.get(controlName);
     if (control) {
       control.enable();
     } else {
       console.error("Control 'firstname' not found in the formGroup.");
     }
   }
+
   markControlAsDirty(controlName: string) {
     const control = this.formGroup.get(controlName);
     if (control) {
@@ -95,6 +101,7 @@ export class AppComponent implements OnDestroy{
       console.error(`Control '${controlName}' not found in the formGroup.`);
     }
   }
+
   markControlAsPristine(controlName: string) {
     const control = this.formGroup.get(controlName);
     if (control) {
@@ -104,26 +111,29 @@ export class AppComponent implements OnDestroy{
     }
   }
   themeService: ThemeService = new ThemeService;
-//   cookieService!: CookieService;
-// ngOnInit() {
-//   // Retrieve the theme value from cookies
-//   const storedTheme = this.cookieService.get('theme');
+
+
+ngOnInit() {
+  // Retrieve the theme value from cookies
+  const storedTheme = this.cookieService.get('theme');
   
-//   // Set the retrieved theme value in the service (or provide a default theme if none is found)
-//   const defaultTheme = 'light'; // You can define your default theme here
-//   const themeToApply = storedTheme || defaultTheme;
-//   this.themeService.setActiveTheme(themeToApply);
-// }
+  // Set the retrieved theme value in the service (or provide a default theme if none is found)
+  const defaultTheme = 'light'; // You can define your default theme here
+  const themeToApply = storedTheme || defaultTheme;
+  this.themeService.setActiveTheme(themeToApply);
+}
+
   toggleTheme() {
     const currentTheme = this.themeService.getActiveTheme();
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     
     // Set the new theme value in a cookie
-    // this.cookieService.set('theme', newTheme);
+    this.cookieService.set('theme', newTheme);
     
     // Update the theme in the service
     this.themeService.setActiveTheme(newTheme);
   }
+
   private logFormGroupState() {
     console.log('FormGroup State:');
     console.log('Dirty:', this.formGroup.dirty);
@@ -153,20 +163,30 @@ export class AppComponent implements OnDestroy{
   onSubmit() {
     if (this.formGroup) {
       console.log('Form submitted successfully!');
-      this.disableControl();
+      this.disableControl("firstname");
       this.markControlAsPristine("lastname");
       //this.logFormGroupState();
+
       //Update the control name from 'firstname' to 'fname'
       this.formGroup.addControl('fname', this.formGroup.get('firstname'));
+
+      //removing formcontrol 
       this.formGroup.removeControl('firstname');
+
+      //add new formcontrol
       this.formGroup.addControl('year', new FormControl('', [Validators.required]));
      
       // Set the form values here directly
       this.formGroup.patchValue({
         fname: 'loki',
         lastname: 'loki',
-        year: 20
+        year: 20,
+        years:['2021'],
+        click: false,
+        radioControl: "Hosteller",
       });
+      
+      this.disableControl("radioControl");
       console.log('FormGroup values:', this.formGroup.value);
       this.logFormGroupState();
       console.log('Checkbox',this.checkboxgrp.value);

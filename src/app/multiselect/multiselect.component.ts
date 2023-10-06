@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ControlsDirective } from '../controls.directive';
-import { OnInit,Input, forwardRef, Output, EventEmitter} from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {Input, forwardRef} from '@angular/core';
+import {  NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-multiselect',
